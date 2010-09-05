@@ -22,7 +22,7 @@
 
 from flask import *
 
-run_port = 8080
+run_port = 80
 app = Flask(__name__)
 
 
