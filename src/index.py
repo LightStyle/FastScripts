@@ -3,7 +3,10 @@
 #
 # ForumFree Magazine Fast Scripts Generator
 #
-# Copyright (C) 2010  Niccolo` "Kurono" Campolungo <damnednickix@hotmail.it>
+# Copyright (C) 2010 
+# Niccolo` "Kurono" Campolungo <damnednickix@hotmail.it>
+# Antonio Micari <darkstyle96@gmail.com>
+# Damiano "Bowser" Faraone <bowser@ffmagazine.net>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
