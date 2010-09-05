@@ -31,7 +31,13 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return 'Index Page'
+	script = ""
+	style = ""
+    return render_template('index.html', **locals())
+	
+@app.route("/admin/", methods=['POST','GET'])
+def admin():
+    return 'Admin Page'
 
 if __name__ == "__main__":
     app.debug = True
