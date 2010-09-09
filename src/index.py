@@ -23,22 +23,27 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 #
 
-from flask import *
+import hashlib
+from flask import Flask, render_template, Markup
 
-run_port = 80
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = hashlib.sha224(__name__).hexdigest()
 
 @app.route("/")
 def index():
-	script = ""
-	style = ""
+    script = Markup("document.write('Test JavaScript<br />')")
+    style = "body { background: #000; color: #fff; }"
     return render_template('index.html', **locals())
-	
-@app.route("/admin/", methods=['POST','GET'])
+
+#funzione solo di controlla, verra' rimossa in seguito
+@app.route("/s/")
+def s():
+    return hashlib.sha224(__name__).hexdigest()
+
+@app.route("/admin/")
 def admin():
-    return 'Admin Page'
+    return render_template('admin.html', **locals())
 
 if __name__ == "__main__":
     app.debug = True
-    app.run('0.0.0.0', run_port)
+    app.run()
