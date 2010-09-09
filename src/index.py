@@ -23,26 +23,50 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 #
 
+import gen
+
 import hashlib
-from flask import Flask, render_template, Markup
+from flask import Flask, render_template, Markup, request, jsonify, escape
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = hashlib.sha224(__name__).hexdigest()
 
 @app.route("/")
 def index():
-    script = Markup("document.write('Test JavaScript<br />')")
-    style = "body { background: #000; color: #fff; }"
+    try:
+        script = Markup(request.args['script'])
+    except:
+        script = Markup("document.write('Test JavaScript<br />')")
+    try:
+        style = request.args['style']
+    except:
+        style = "body { background: #000; color: #fff; }"
     return render_template('index.html', **locals())
 
-#funzione solo di controlla, verra' rimossa in seguito
+#funzione solo di controllo, verra' rimossa in seguito
 @app.route("/s/")
 def s():
-    return hashlib.sha224(__name__).hexdigest()
+    sk = app.config['SECRET_KEY']
+    sk = sk[::-1]
+    return 'Secret Key Lenght: {0}<br />\nSecret Key: {1}'.format(len(sk),
+                                                                  sk)
 
 @app.route("/admin/")
 def admin():
     return render_template('admin.html', **locals())
+    
+@app.route("/_nocopy/")
+def _nocopy():
+    try:
+        type = request.args['type']
+    except:
+        type = "1"
+    try:
+        alert = request.args['alert']
+    except:
+        alert = ''
+    script = gen.nocopy(type, alert)
+    return jsonify(script=script)
 
 if __name__ == "__main__":
     app.debug = True
