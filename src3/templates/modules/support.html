@@ -1,12 +1,20 @@
 {% extends "wrapper.html" %}
-{% block title %}Up Support{% endblock %}
+{% block page_title %}Up Supporto{% endblock %}
+{% block title %}Script Up Supporto{% endblock %}
 
 {% block content %}
-	{% if output == '' %}
-		<a href="?support_id=12345&support_isText=1&support_text=LOL&check=auto">First</a>
-		<a href="?support_id=43123&support_isText=0&support_text=LINK_IMG&check=auto">Second</a>
-		<a href="?support_id=69&support_text=TESTO&check=auto">Third</a>
+	{% if output is number %}
+					<h2>Modulo di generazione script auto-up al supporto</h2>
+						<form action="generator/support" method="POST">
+							<input type="radio" name="support_isText" value="1" checked> Testo <br>
+							<input type="radio" name="support_isText" value="0"> Immagine <br><br>
+							<input type="text" name="support_text"> Testo / Link immagine <br>
+							<input type="text" name="support_id"> ID Topic
+							<input type="hidden" name="check" value="auto"> <br>
+							<input type="submit" name="submit" value="Procedi">
+						</form>
 	{% else %}
-		{{output}}
+					<pre>{{output}}</pre>
+					<a href="javascript:history.back()">< Torna indietro</a>
 	{% endif %}
 {% endblock %}
