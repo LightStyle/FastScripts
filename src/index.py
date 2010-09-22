@@ -30,9 +30,10 @@
 # Core Modules
 import hashlib
 import os
-from flask import Flask, render_template, request, session, response
+from flask import Flask, render_template, request, session, current_app
 
 app = Flask(__name__)
+
 
 # ----- Index ------
 @app.route("/")
@@ -45,10 +46,8 @@ def index():
 			if not (s in i) and not (s in ignList):
 				i.append(s)
 		return i
-
 	gen_list = os.listdir('modules')
 	gen_parsed_list = scriptList(gen_list)
-	show_box = False
 	return render_template('index.html', gen_parsed_list=gen_parsed_list)
 
 # ----- Generatori ------
@@ -63,21 +62,28 @@ def generatore(gen_name):
 
 		output = gen.output()
 
-		nick = cookie('nick') or param('nick')
-		forum = cookie('nick') or param('forum')
+		nick = cookie('nick') and cookie('nick') or param('nick')
+		forum = cookie('nick') and cookie('nick') or param('forum')
 		show_box = True
 		if nick or forum:
 			show_box = False
 
 		html = render_template('modules/'+gen_name+'.html', output=output, show_box=show_box)
-		return html
+		response = current_app.make_response(html)
+		response.set_cookie('nick', param('nick'))
+		response.set_cookie('forum', param('forum'))
+		return response
 
-# ----- Feedback ------
+@app.route("/db_data_stats")
+def db_data_stats():
+	data = db.stats.find()
+	l = []
+	for i in data:
+		l.append(str(i))
+	str = '<br>\n'.join(l)
+	return str
 
-#@app.route("/feedback", methods="['GET','POST']")
-#def feedback():
-#	response.set_cookie
-# ----- Funzioni esterne ------
+# ----- Funzioni aggiuntive ------
 
 def hash(s):
 	string = hashlib.sha224(s).hexdigest()
@@ -86,7 +92,7 @@ def hash(s):
 
 def param(name):
 	try:
-		p = request.args[name]
+		p = request.values[name]
 	except:
 		p = ''
 	return p
