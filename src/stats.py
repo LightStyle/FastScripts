@@ -26,43 +26,4 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 # -------------------------------------------------------------------------
-
-# Core Modules
-from flask import Flask, render_template, Markup, request, jsonify, escape
-import os
-
-app = Flask(__name__)
-
-# ----- Index ------
-@app.route("/")
-def index():
-	try:
-		script = Markup(request.args['script'])
-	except:
-		script = Markup("document.write('Test JavaScript<br />')")
-	try:
-		style = request.args['style']
-	except:
-		style = "body { background: #000; color: #fff; }"
-	return render_template('index.html', **locals())
-
-# ----- Generatori ------
-@app.route("/generator/<gen_name>", methods=['GET', 'POST'])
-def generatore(gen_name):
-	gen_name = gen_name.lower()
-	gen_list = os.listdir('modules')
-
-	if (gen_name + '.py') in gen_list:
-		gen_load = __import__('modules.'+gen_name, globals(), locals(), ['generator'], -1)
-		gen = gen_load.generator()
-
-		output = gen.output()
-
-		html = render_template('modules/'+gen_name+'.html', output=output)
-		return html
-
-# -------------------------------------------------------------------------
-if __name__ == "__main__":
-	app.debug = True
-	app.run()
-	# app.run('0.0.0.0')
+from pymongo import *

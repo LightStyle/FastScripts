@@ -1,0 +1,47 @@
+﻿{% extends "wrapper.html" %}
+{% block page_title %}Scripts Anti Copiatura{% endblock %}
+{% block page_desc %}Scripts Anti Copiatura{% endblock %}
+{% block title %}Scripts Anti Copiatura{% endblock %}
+
+{% block content %}
+	{% if output['action'] == 'idx' %}
+					<h2 style="text-align: left">Seleziona lo Script:</h2>
+					<dl style="text-align: left">
+						<dt>1. <a href="generator/nocopy?v=1"><b>Disabilitare il tasto destro del mouse + Alert (opzionale)</b></a> <em>[Cross-Browser]</em></dt>
+							<dd>Questo script, funzionante su <em>Internet Explorer, FireFox e Netscape, permette di disabilitare il tasto destro del mouse impedendo l'apertura del menù di contesto, può essere eventualmente mostrato un messaggio che verrà presentato in un alert.</em></dd>
+						<dt>2. <a href="generator/nocopy?v=2"><b>Blocco di tasto destro, selezione e trascinamento (Sconsigliato)</b></a> <em>[Solo <acronym title="Internet Explorer">IE</acronym>]</em></dt>
+							<dd>Questo script funziona <b>solo</b> su <em>Internet Explorer</em> e permette di impedire oltre che l'apertura del menù di contesto al click del tasto destro anche di disabilitare la selezione dei testi e il loro trascinamento. E' particolarmente sconsigliato in quanto catastroficamente in-accessibile e non cross-browser.</dd>
+						<dt>3. <a href="generator/nocopy?v=3"><b>Solo Alert (Consigliato - Accessibile)</b></a> <em>[Cross-Browser]</em></dt>
+							<dd>Questo script mostra un alert di avvertimento alla pressione del tasto destro, particolarmente consigliato perché leggero, cross-browser e non troppo invasivo.</dd>
+					</dl>
+					<h2 class="guida"><a href="http://ffmagazine.forumfree.it/?t=36582013">Guida Scripts Anti Copiatura</a>
+	{% elif output['action'] == 'form' %}
+					<h2>Modulo di generazione Script anti-copiatura</h2>
+					{% if output['select'] == 1 %}
+						<form action="generator/nocopy?v=1" method="post">
+							<input type="text" name="nocopy_message">
+							<input type="hidden" name="nocopy_check" value="1">
+							<input type="submit" name="submit" value="Procedi">
+						</form>
+					{% elif output['select'] == 3 %}
+						<form action="generator/nocopy?v=3" method="post">
+							<input type="text" name="nocopy_message" value="Copyright, nel rispetto dello staff, evita di copiare! Adesso apparirà il menu'">
+							<input type="hidden" name="nocopy_check" value="1">
+							<input type="submit" name="submit" value="Procedi">
+						</form>
+					{% elif output['select'] == 2 %}
+						<form action="generator/nocopy?v=2" method="post">
+							<input type="hidden" name="nocopy_check" value="1">
+							<input type="submit" name="submit" value="Procedi">
+						</form>
+					{% else %}
+						<b>-Template errore-</b><br>
+						Codice errore: <b>{{output['error']['code']}}</b><br>
+						Messaggio di errore: <b>{{output['error']['msg']}}</b><br>
+					{% endif %}
+				<a href="javascript:history.back()">< Torna indietro</a>
+	{% elif output['action'] == 'code' %}
+					<pre>{{output['code']}}</pre>
+					<a href="javascript:history.back()">< Torna indietro</a>
+	{% endif %}
+{% endblock %}

@@ -1,4 +1,3 @@
-{% extends "layout.html" %}
-	{% block body %}
-		Index Page - In costruzione
-	{% endblock %}
+		{% for gen in gen_parsed_list %}
+			<a href="generator/{{gen}}" style="text-transform: capitalize">{{gen}}</a> <br>
+		{% endfor %}

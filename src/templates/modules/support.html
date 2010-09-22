@@ -1,0 +1,28 @@
+{% extends "wrapper.html" %}
+{% block page_title %}Script Auto-Up Supporto{% endblock %}
+{% block page_desc %}Script Auto-Up Supporto{% endblock %}
+{% block title %}Script Auto-Up Supporto{% endblock %}
+
+{% block content %}
+	{% if output['action'] == 'error' %}
+				<div class="alert">
+					<b>-Template errore-</b><br>
+						Codice errore: <b>{{output['error']['code']}}</b><br>
+						Descrizione errore: <b>{{output['error']['msg']}}</b><br>
+						Messaggio errore: <b>{{output['error']['txt']}}</b><br>
+				</div>
+	{% elif output['action'] == 'form' %}
+					<h2>Modulo di generazione Script Auto-Up al supporto</h2>
+						<form action="generator/support" method="POST">
+							<input type="radio" name="support_isText" value="1" checked> Testo <br>
+							<input type="radio" name="support_isText" value="0"> Immagine <br><br>
+							<input type="text" name="support_text"> Testo / Link immagine <br>
+							<input type="text" name="support_id"> ID Topic
+							<input type="hidden" name="check" value="1"> <br>
+							<input type="submit" name="submit" value="Procedi">
+						</form>
+	{% elif output['action'] == 'code' %}
+					<pre>{{output['code']}}</pre>
+					<a href="javascript:history.back()">< Torna indietro</a>
+	{% endif %}
+{% endblock %}

@@ -35,30 +35,40 @@ class generator:
 	__alert = ''
 	__select = ''
 	
+	# Variabili di servizio
+	__action = '' # idx | form | code
+	__page = 0 # numero pagina (form), qui non utilizzato
+	__error = {}
+	
 	def __init__(self):
 		try:
-			self.__select = int(request.args['nocopy_select'])
+			self.__select = int(request.args['v'])
 		except:
 			pass
 			
 		try:
-			self.__check = str(request.values['check'])
+			self.__check = int(request.values['nocopy_check'])
 		except:
 			pass
 			
 		try:
-			self.__alert = str(request.values['nocopy_message'])
+			self.__alert = str(request.values['nocopy_message']).replace('"','\\"')
 		except:
 			pass
 
-		if len(self.__check) > 0:
+		if self.__check == 1:
+			self.__action = 'code'
 			self.__script = self.__load()
 		elif self.__select != '':
-			self.__script = self.__select
+			self.__action = 'form'
+			self.__error['code'] = '000'
+			self.__error['msg'] = 'Script inesistente'
+		else:
+			self.__action = 'idx'
 		
 	def __load(self):
 		if self.__select == 1:
-			return '''<script type="text/javascript">
+			return u'''<script type="text/javascript">
 //Generato con il FFMag FastScripts - Script by Bowser
 var tdmessaggio="%s";
 // Autore dello script: Maximus (maximus@nsimail.com) w/ By DynamicDrive.com
@@ -75,7 +85,7 @@ else if (document.all&&!document.getElementById){ document.onmousedown=clickIE4;
 document.oncontextmenu=function(){ if(tdmessaggio!= '') alert(tdmessaggio); return false;};
 </script>''' % self.__alert
 		elif self.__select == 2:
-			return '''<script type="text/javascript">
+			return u'''<script type="text/javascript">
 //Generato con il FFMag FastScripts - Script by Bowser
 document.oncontextmenu=document.onselectstart=document.ondragstart=function() {return false;};
 </script>'''
@@ -83,10 +93,20 @@ document.oncontextmenu=document.onselectstart=document.ondragstart=function() {r
 			return '''<script type="text/javascript">
 //Generato con il FFMag FastScripts - Script by Bowser
 var tdmessaggio = "%s";
-document.oncontextmenu=function(){ alert(tdmessaggio + "\\nAdesso apparira il menu'"); return true; }
+document.oncontextmenu=function(){ alert(tdmessaggio); return true; }
 </script>''' % self.__alert
 		else:
-			return 'ERRORE'
+			self.__error['code'] = '000'
+			self.__error['msg'] = 'Script inesistente'
+			return ''
 
 	def output(self):
-		return self.__script
+		i = {}
+		i['action'] = self.__action
+		i['select'] = self.__select
+		i['code'] = self.__script
+		i['page'] = self.__page
+		if self.__error:
+			i['error'] = self.__error
+		
+		return i
