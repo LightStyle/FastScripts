@@ -28,12 +28,13 @@
 # -------------------------------------------------------------------------
 
 # Core Modules
+import datetime
 import hashlib
 import os
-from flask import Flask, render_template, request, session, current_app
+import pymongo
+from flask import Flask, render_template, request, current_app
 
 app = Flask(__name__)
-
 
 # ----- Index ------
 @app.route("/")
@@ -72,16 +73,28 @@ def generatore(gen_name):
 		response = current_app.make_response(html)
 		response.set_cookie('nick', param('nick'))
 		response.set_cookie('forum', param('forum'))
+		try:
+			db = pymongo.Connection().fs
+			ip = request.remote_addr
+			date = datetime.datetime.now()
+			name = gen_name
+			script_dict = {}
+			script_dict['name'] = name
+			script_dict['date'] = date
+			script_dict['ip'] = ip
+			script_dict['nick'] = nick
+			script_dict['forum'] = forum
+			db.stats.insert(script_dict)
+		except:
+			response.set_cookie('error', True)
 		return response
 
-@app.route("/db_data_stats")
+@app.route("/db_data_stats/")
 def db_data_stats():
+	conn = pymongo.Connection()
+	db = conn.fs
 	data = db.stats.find()
-	l = []
-	for i in data:
-		l.append(str(i))
-	str = '<br>\n'.join(l)
-	return str
+	return render_template('stats.html', data_list=data)
 
 # ----- Funzioni aggiuntive ------
 
