@@ -94,18 +94,27 @@ def generatore(gen_name):
 			response.set_cookie('error', True)
 		return response
 
-@app.route("/db_data_stats/")
+@app.route("/db_data_stats/", methods=['GET','POST'])
 def db_data_stats():
 	username = 'admin'
 	password = '3rw086paH2d3'
-	loginform = '<form method="GET" action=""><input type="text" name="user"> Username <br><input type="password" name="password"> Password <br><input type="submit" value="Accedi"></form>'
+	loginform = '''<form method="POST" action="">
+<label><input type="text" name="user"> Username <br></label>
+<label><input type="password" name="password"> Password <br></label>
+<label style="font-size: 10px"><input type="checkbox" name="remember" value="1"> Ricordami<br></label>
+<input type="submit" value="Accedi">
+</form>'''
 	conn = pymongo.Connection()
 	db = conn.fs
 	user = param('user')
 	pwd = param('password')
-	logged = False
+	remember = param('remember')
+	logged = cookie('logged')
+	secs = None
 	if user == username and pwd == password:
 		logged = True
+		if remember:
+			secs = 2592000
 	delete = param('delete')
 	if logged:
 		if delete:
@@ -117,7 +126,9 @@ def db_data_stats():
 		r = render_template('stats.html', data_list=data_list, user=user, pwd=pwd)
 	else:
 		r = loginform
-	return r
+	response = current_app.make_response(r)
+	response.set_cookie('logged', '1', max_age=secs)
+	return response
 
 @app.route("/stats/")
 def stats():
