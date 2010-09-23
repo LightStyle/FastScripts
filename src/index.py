@@ -97,7 +97,7 @@ def generatore(gen_name):
 @app.route("/db_data_stats/", methods=['GET','POST'])
 def db_data_stats():
 	username = 'admin'
-	password = '3rw086paH2d3'
+	password = '' #secret pw - non githubbata
 	loginform = '''<form method="POST" action="">
 <label><input type="text" name="user"> Username <br></label>
 <label><input type="password" name="password"> Password <br></label>
@@ -114,7 +114,7 @@ def db_data_stats():
 	if user == username and pwd == password:
 		logged = True
 		if remember:
-			secs = 2592000
+			secs = 2592000 # 30 giorni
 	delete = param('delete')
 	if logged:
 		if delete:
@@ -127,7 +127,8 @@ def db_data_stats():
 	else:
 		r = loginform
 	response = current_app.make_response(r)
-	response.set_cookie('logged', '1', max_age=secs)
+	if logged:
+		response.set_cookie('logged', '1', max_age=secs)
 	return response
 
 @app.route("/stats/")
