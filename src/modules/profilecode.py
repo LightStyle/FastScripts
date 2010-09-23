@@ -82,7 +82,7 @@ class generator:
 					self.__error = errors.error('001', 'Non hai specificato un testo per il bottone')
 				else:
 					self.__error = errors.error('001', "Non hai specificato il link dell'immagine")
-			elif not (self.__isText and errors.urlMatch(self.__text)):
+			elif (not self.__isText) and (not errors.urlMatch(self.__text)):
 				self.__action = 'error'
 				self.__error = errors.error('002', "Il link dell'immagine deve iniziare con http:// e finire con un'estensione valida")
 			elif self.__alert == '':

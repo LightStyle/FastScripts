@@ -32,7 +32,7 @@ import datetime
 import hashlib
 import os
 import pymongo
-from flask import Flask, render_template, request, current_app
+from flask import Flask, render_template, request, current_app, redirect
 
 app = Flask(__name__)
 
@@ -65,26 +65,30 @@ def generatore(gen_name):
 
 		nick = cookie('nick') and cookie('nick') or param('nick')
 		forum = cookie('nick') and cookie('nick') or param('forum')
+		dont_show = cookie('dont_show') and cookie('dont_show') or param('dont_show')
 		show_box = True
-		if nick or forum:
+		if nick or forum or dont_show:
 			show_box = False
 
 		html = render_template('modules/'+gen_name+'.html', output=output, show_box=show_box)
 		response = current_app.make_response(html)
 		response.set_cookie('nick', param('nick'))
 		response.set_cookie('forum', param('forum'))
+		if param('dont_show'):
+			response.set_cookie('dont_show', param('dont_show'))
 		try:
-			db = pymongo.Connection().fs
-			ip = request.remote_addr
-			date = datetime.datetime.now()
-			name = gen_name
-			script_dict = {}
-			script_dict['name'] = name
-			script_dict['date'] = date
-			script_dict['ip'] = ip
-			script_dict['nick'] = nick
-			script_dict['forum'] = forum
-			db.stats.insert(script_dict)
+			if output['action'] == 'code':
+				db = pymongo.Connection().fs
+				ip = request.remote_addr
+				date = datetime.datetime.now()
+				name = gen_name
+				script_dict = {}
+				script_dict['name'] = name
+				script_dict['date'] = date
+				script_dict['ip'] = ip
+				script_dict['nick'] = nick
+				script_dict['forum'] = forum
+				db.stats.insert(script_dict)
 		except:
 			response.set_cookie('error', True)
 		return response
@@ -94,7 +98,16 @@ def db_data_stats():
 	conn = pymongo.Connection()
 	db = conn.fs
 	data = db.stats.find()
-	return render_template('stats.html', data_list=data)
+	data_list = []
+	for d in data:
+		data_list.append(d)
+	del_dict = {}
+	delete = param('delete')
+	if delete:
+		db.stats.remove({'_id': pymongo.objectid.ObjectId(delete)})
+		return redirect('/fastscripts/src/db_data_stats/')
+
+	return render_template('stats.html', data_list=data_list, delete=delete, del_dict=del_dict)
 
 # ----- Funzioni aggiuntive ------
 

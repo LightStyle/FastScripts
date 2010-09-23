@@ -5,14 +5,18 @@
 	<td>IP</td>
 	<td>Nick</td>
 	<td>Forum</td>
+	<td>OID</td>
+	<td>Cancella</td>
 	</tr>
 {% for data in data_list %}
 	<tr>
-	<td>{{data['name']}}</td>
-	<td>{{data['date']}}</td>
-	<td>{{data['ip']}}</td>
-	<td>{{data['nick']}}</td>
-	<td>{{data['forum']}}</td>
+		<td>{{data['name']}}</td>
+		<td>{{data['date']}}</td>
+		<td>{{data['ip']}}</td>
+		<td>{{data['nick']}}</td>
+		<td>{{data['forum']}}</td>
+		<td>{{data['_id']}}</td>
+		<td><a href="?delete={{data['_id']}}">X</a></td>
 	</tr>
 {% endfor %}
 </table>
