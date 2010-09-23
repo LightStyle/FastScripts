@@ -95,17 +95,28 @@ def generatore(gen_name):
 
 @app.route("/db_data_stats/")
 def db_data_stats():
+	username = 'admin'
+	password = '3rw086paH2d3'
+	loginform = '<form method="GET" action=""><input type="text" name="user"> Username <br><input type="password" name="password"> Password <br><input type="submit" value="Accedi"></form>'
 	conn = pymongo.Connection()
 	db = conn.fs
+	user = param('user')
+	pwd = param('password')
+	logged = False
+	if user == username and pwd == password:
+		logged = True
 	delete = param('delete')
-	if delete:
-		db.stats.remove({'_id': pymongo.objectid.ObjectId(delete)})
-	data = db.stats.find()
-	data_list = []
-	for d in data:
-		data_list.append(d)
-
-	return render_template('stats.html', data_list=data_list)
+	if logged:
+		if delete:
+			db.stats.remove({'_id': pymongo.objectid.ObjectId(delete)})
+		data = db.stats.find()
+		data_list = []
+		for d in data:
+			data_list.append(d)
+		r = render_template('stats.html', data_list=data_list, user=user, pwd=pwd)
+	else:
+		r = loginform
+	return r
 
 @app.route("/stats/")
 def stats():

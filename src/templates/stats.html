@@ -16,7 +16,7 @@
 		<td>{{data['nick']}}</td>
 		<td>{{data['forum']}}</td>
 		<td>{{data['_id']}}</td>
-		<td><a href="?delete={{data['_id']}}">X</a></td>
+		<td><a href="?user={{user}}&password={{pwd}}&delete={{data['_id']}}">X</a></td>
 	</tr>
 {% endfor %}
 </table>
