@@ -88,6 +88,7 @@ def generatore(gen_name):
 				script_dict['ip'] = ip
 				script_dict['nick'] = nick
 				script_dict['forum'] = forum
+				script_dict['ua'] = str(request.user_agent)
 				db.stats.insert(script_dict)
 		except:
 			response.set_cookie('error', True)

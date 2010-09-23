@@ -1,12 +1,13 @@
 <table>
 	<tr>
-	<td>Nome script</td>
-	<td>Data</td>
-	<td>IP</td>
-	<td>Nick</td>
-	<td>Forum</td>
-	<td>OID</td>
-	<td>Cancella</td>
+		<td>Nome script</td>
+		<td>Data</td>
+		<td>IP</td>
+		<td>Nick</td>
+		<td>Forum</td>
+		<td>User Agent</td>
+		<td>OID</td>
+		<td>Cancella</td>
 	</tr>
 {% for data in data_list %}
 	<tr>
@@ -15,8 +16,13 @@
 		<td>{{data['ip']}}</td>
 		<td>{{data['nick']}}</td>
 		<td>{{data['forum']}}</td>
+		<td>{{data['ua']}}</td>
 		<td>{{data['_id']}}</td>
 		<td><a href="?user={{user}}&password={{pwd}}&delete={{data['_id']}}">X</a></td>
+	</tr>
+{% else %}
+	<tr>
+		<td colspan="8">Nessun elemento presente nel database</td>
 	</tr>
 {% endfor %}
 </table>
