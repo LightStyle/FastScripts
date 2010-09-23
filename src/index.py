@@ -32,7 +32,7 @@ import datetime
 import hashlib
 import os
 import pymongo
-from flask import Flask, render_template, request, current_app, redirect
+from flask import Flask, render_template, request, current_app
 
 app = Flask(__name__)
 
@@ -97,17 +97,15 @@ def generatore(gen_name):
 def db_data_stats():
 	conn = pymongo.Connection()
 	db = conn.fs
+	delete = param('delete')
+	if delete:
+		db.stats.remove({'_id': pymongo.objectid.ObjectId(delete)})
 	data = db.stats.find()
 	data_list = []
 	for d in data:
 		data_list.append(d)
-	del_dict = {}
-	delete = param('delete')
-	if delete:
-		db.stats.remove({'_id': pymongo.objectid.ObjectId(delete)})
-		return redirect('/fastscripts/src/db_data_stats/')
 
-	return render_template('stats.html', data_list=data_list, delete=delete, del_dict=del_dict)
+	return render_template('stats.html', data_list=data_list)
 
 # ----- Funzioni aggiuntive ------
 
