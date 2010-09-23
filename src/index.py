@@ -74,8 +74,8 @@ def generatore(gen_name):
 		response = current_app.make_response(html)
 		response.set_cookie('nick', param('nick'))
 		response.set_cookie('forum', param('forum'))
-		if param('dont_show'):
-			response.set_cookie('dont_show', param('dont_show'))
+		if param('dont_show') or nick or forum:
+			response.set_cookie('dont_show', '1')
 		try:
 			if output['action'] == 'code':
 				db = pymongo.Connection().fs
@@ -106,6 +106,34 @@ def db_data_stats():
 		data_list.append(d)
 
 	return render_template('stats.html', data_list=data_list)
+
+@app.route("/stats/")
+def stats():
+	def orderBy(sort, data):
+		if sort == 'name':
+			d = sorted(data, key=lambda i: i['name'])
+		elif sort == 'date':
+			d = sorted(data, key=lambda i: i['date'])
+		else:
+			d = data
+		return d
+	def getData(my=False):
+		conn = pymongo.Connection()
+		db = conn.fs
+		my_dict = {}
+		if my:
+			ip = request.remote_addr
+			my_dict = {'ip': ip}
+		data = db.stats.find(my_dict)
+		return data
+	show_mine = False
+	order = param('orderBy')
+	my = param('my')
+	data = getData(my)
+	ordered = orderBy(order, data)
+	if my == 'True' or my == '1':
+		show_mine = True
+	return render_template('pubstats.html', data_list=ordered, show_mine=show_mine)
 
 # ----- Funzioni aggiuntive ------
 

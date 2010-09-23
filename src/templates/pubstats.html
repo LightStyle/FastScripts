@@ -1,0 +1,26 @@
+<table>
+	<tr>
+		<td>Nome script</td>
+		<td>Data</td>
+		{% if show_mine %}
+		<td>IP</td>
+		<td>Nick</td>
+		<td>Forum</td>
+		{% endif %}
+	</tr>
+{% for data in data_list %}
+	<tr>
+		<td>{{data['name']}}</td>
+		<td>{{data['date']}}</td>
+		{% if show_mine %}
+		<td>{{data['ip']}}</td>
+		<td>{{data['nick']}}</td>
+		<td>{{data['forum']}}</td>
+		{% endif %}
+		</tr>
+{% endfor %}
+</table>
+<br>
+<a href="?my=1">Mostra i miei</a> <br>
+<a href="?orderBy=name">Ordina per nome</a> <br>
+<a href="?orderBy=date">Ordina per data</a> <br>
