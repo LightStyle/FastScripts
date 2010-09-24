@@ -97,7 +97,7 @@ def generatore(gen_name):
 @app.route("/db_data_stats/", methods=['GET','POST'])
 def db_data_stats():
 	username = 'admin'
-	password = '' #secret pw - non githubbata
+	password = 'a-7v4p8y8_9_' #secret pw - non githubbata
 	loginform = '''<form method="POST" action="">
 <label><input type="text" name="user"> Username <br></label>
 <label><input type="password" name="password"> Password <br></label>
@@ -123,7 +123,7 @@ def db_data_stats():
 		data_list = []
 		for d in data:
 			data_list.append(d)
-		r = render_template('stats.html', data_list=data_list, user=user, pwd=pwd)
+		r = render_template('privstats.html', data_list=data_list, user=user, pwd=pwd)
 	else:
 		r = loginform
 	response = current_app.make_response(r)

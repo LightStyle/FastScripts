@@ -36,5 +36,8 @@ h2.guida {text-align: right}
 .skin_tbl_border, .mainbg {background: #FAFAFA}
 .title, .sunbar, .row2 {height: 22px; background: #3E3B50 url(http://digilander.libero.it/woso/funk/title.png) top center repeat-x; height: 22px}
 
+.aa {background: #F0F0F0 none;}
+.ww {background: #FAFAFA none;}
+
 /* Errore */
 .alert {font-size: 13px; line-height: 150%; padding: 3px; background: #FFEFF1; color: #8F4751; border: 1px solid #CF9BA2; -moz-border-radius: 3px; -moz-box-shadow: 0 0 2px 2px #EEE; -webkit-border-radius: 3px; -webkit-box-shadow: 0 0 2px 2px #EEE}
