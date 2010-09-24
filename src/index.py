@@ -97,7 +97,7 @@ def generatore(gen_name):
 @app.route("/db_data_stats/", methods=['GET','POST'])
 def db_data_stats():
 	username = 'admin'
-	password = 'a-7v4p8y8_9_' #secret pw - non githubbata
+	password = 'a-7v4p8y8_9_' #da cambiare a fine progetto, nasconderla a github
 	loginform = '''<form method="POST" action="">
 <label><input type="text" name="user"> Username <br></label>
 <label><input type="password" name="password"> Password <br></label>
