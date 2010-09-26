@@ -1,0 +1,6 @@
+{% extends "wrapper.html" %}
+{% block content %}
+	{% for gen in gen_parsed_list %}
+					<a href="generator/{{gen}}" style="text-transform: capitalize">{{gen}}</a> <br>
+	{% endfor %}
+{% endblock %}

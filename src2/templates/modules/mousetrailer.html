@@ -1,0 +1,48 @@
+{% extends "wrapper.html" %}
+{% block page_title %}Testo accanto al mouse{% endblock %}
+{% block page_desc %}Testo accanto al mouse{% endblock %}
+{% block title %}Testo accanto al mouse{% endblock %}
+
+{% block content %}
+	{% if output['action'] == 'error' %}
+				<div class="alert">
+					<b>-Template errore-</b><br>
+						Codice errore: <b>{{output['error']['code']}}</b><br>
+						Descrizione errore: <b>{{output['error']['msg']}}</b><br>
+						Messaggio errore: <b>{{output['error']['txt']}}</b><br>
+				</div>
+	{% elif output['action'] == 'form' %}
+					<h2>Modulo di generazione Testo accanto al mouse</h2>
+						<form action="generator/mousetrailer" method="POST">
+							Velocita':
+							<select name="mousetrailer_speed" id="speed"
+							onchange="if(this.value == 'pers') {$('#speedPers').css('display', 'block');} else {$('#speedPers').css('display', 'none');}">
+								<option value="slow">Lenta</option>
+								<option value="medium" selected>Media</option>
+								<option value="fast">Veloce</option>
+								<option value="pers" onclick="$('#speedPers').css('display','block')">Personalizza</option>
+							</select> <br>
+							<div id="speedPers" style="display: none">
+								<input type="text" name="mousetrailer_speedPers"> Personalizza <br>
+							</div>
+							<input type="checkbox" name="mousetrailer_isBold" value="1" checked> Grassetto <br>
+							<input type="checkbox" name="mousetrailer_isItalic" value="1"> Corsivo <br>
+							<input type="checkbox" name="mousetrailer_isBlink" value="1"> Lampeggiante <br>
+							<input type="text" name="mousetrailer_color"> Colore <br>
+							<input type="text" name="mousetrailer_distance" value="10"> Distanza <br>
+							<input type="text" name="mousetrailer_size"> Dimensione <br>
+							Tipo dimensione:
+							<select name="mousetrailer_sizeType">
+								<option value="pt">pt</option>
+								<option value="px">px</option>
+							</select> <br>
+							<input type="text" name="mousetrailer_text"> Messaggio <br>
+							<input type="hidden" name="check" value="1"> <br>
+							<input type="submit" name="submit" value="Procedi">
+						</form>
+	{% elif output['action'] == 'code' %}
+					<pre>{{output['code']}}</pre>
+					Da <b>inserire in</b> <i>Amministrazione > Gestione Codici HTML > In cima al forum</i> <br>
+					<a href="javascript:history.back()">< Torna indietro</a>
+	{% endif %}
+{% endblock %}
