@@ -1,0 +1,9 @@
+.statsbox {background: transparent url(/fastscripts/src2/files/images/black50.png) repeat center center; position: fixed!important; position:absolute; height: 100%; width: 100%; z-index: 999; top:0; left:0; display:block; text-align: left} 
+.statsbox div.cont {position: absolute; width: 30%; left: 35%; top: 25%; padding: 15px; background: transparent url(/fastscripts/src2/files/images/black50.png) repeat center center; -moz-border-radius: 15px; -webkit-border-radius: 15px; border-radius: 15px} 
+.statsbox div span.titlebox {font-size: 13pt; color: #3F3F3F; text-decoration: underline; height: 30px; line-height: 30px; padding: 0 10px; background: #bbbbbb url(/fastscripts/src2/files/images/specialBkg.gif) center left repeat-x; display: block; border-bottom: 1px solid #cfcfcf} 
+.statsbox div span.truecontent {display: block; font-size: 9pt; margin: 5px 10px 10px; color: black}
+.statsbox div span.truecontent form {text-align: center}
+.statsbox div span.truecontent form label {font-size: 9.5pt}
+.statsbox div span.truecontent form  input {margin: 2px 5px}
+.statsbox .subCont {background: #f0f0f0; margin: 0; padding: 0; border: 1px solid #cfcfcf} 
+label {cursor: pointer}

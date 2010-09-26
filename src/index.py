@@ -37,7 +37,7 @@ from flask import Flask, render_template, request, current_app
 app = Flask(__name__)
 
 # ----- Index ------
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
 	def scriptList(l):
 		i = []
@@ -49,7 +49,15 @@ def index():
 		return i
 	gen_list = os.listdir('modules')
 	gen_parsed_list = scriptList(gen_list)
-	return render_template('index.html', gen_parsed_list=gen_parsed_list)
+	statsbox = statsbox_init(cookie('statsbox'), param('submit'), param('nick'), param('forum')) # Inizializzamento Box Inserimento Dati
+	
+	html = render_template('index.html', statsbox=statsbox, gen_parsed_list=gen_parsed_list) # Render Template
+	
+	# ----- Cookie Box Inserimento Dati ------
+	response = current_app.make_response(html)
+	statsbox_cookie(response, param('submit'), param('nick'), param('forum'))
+
+	return response
 
 # ----- Generatori ------
 @app.route("/generator/<gen_name>", methods=['GET', 'POST'])
@@ -62,20 +70,20 @@ def generatore(gen_name):
 		gen = gen_load.generator()
 
 		output = gen.output()
-
-		nick = cookie('nick') and cookie('nick') or param('nick')
-		forum = cookie('nick') and cookie('nick') or param('forum')
-		dont_show = cookie('dont_show') and cookie('dont_show') or param('dont_show')
-		show_box = True
-		if nick or forum or dont_show:
-			show_box = False
-
-		html = render_template('modules/'+gen_name+'.html', output=output, show_box=show_box)
+		
+		statsbox = statsbox_init(cookie('statsbox'), param('submit'), param('nick'), param('forum')) # Inizializzamento Box Inserimento Dati
+		
+		html = render_template('modules/'+gen_name+'.html', statsbox=statsbox, output=output) # Render Template
+		
+		# ----- Cookie Box Inserimento Dati ------
 		response = current_app.make_response(html)
-		response.set_cookie('nick', param('nick'))
-		response.set_cookie('forum', param('forum'))
-		if param('dont_show') or nick or forum:
-			response.set_cookie('dont_show', '1')
+		statsbox_cookie(response, param('submit'), param('nick'), param('forum'))
+		sbox = cookie('statsbox')
+		nick = ''
+		forum = ''
+		if sbox != 'false' and sbox != '':
+			nick = sbox.split('|')[0]
+			forum = sbox.split('|')[1]
 		try:
 			if output['action'] == 'code':
 				db = pymongo.Connection().fs
@@ -90,8 +98,10 @@ def generatore(gen_name):
 				script_dict['forum'] = forum
 				script_dict['ua'] = str(request.user_agent)
 				db.stats.insert(script_dict)
+				response.set_cookie('ok', '1')
 		except:
-			response.set_cookie('error', True)
+			response.set_cookie('err', '1')
+
 		return response
 
 @app.route("/db_data_stats/", methods=['GET','POST'])
@@ -179,6 +189,21 @@ def cookie(name):
 	except:
 		c = ''
 	return c
+
+# ----- Funzioni statsbox per ripetere il codice sia in index() che generator() ecc. ------
+def statsbox_init(cookie, submit, nick, forum):
+	statsbox = True
+	if cookie != '' or (submit != '' and submit != 'Conferma') or (submit != '' and (nick != '' or forum != '')): 
+		statsbox = False
+	return statsbox
+
+	
+def statsbox_cookie(response, submit, nick, forum):
+	if submit == 'Conferma':
+		if nick or forum:
+			response.set_cookie('statsbox', "%s|%s" % (nick, forum), max_age=7776000) #90 Giorni
+	elif submit != '': #Non voglio aiutarvi
+		response.set_cookie('statsbox', "false", max_age=7776000) #90 Giorni
 
 # -------------------------------------------------------------------------
 

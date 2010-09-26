@@ -5,26 +5,28 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="description" value="{% block page_desc %}{% endblock %}">
 		<base href="http://devel.ffmagazine.net/fastscripts/src/">
-		<link rel="stylesheet" href="files/style/styles.css" type="text/css">
-		<link rel="stylesheet" href="files/style/thickbox.css" type="text/css">
+		<link rel="stylesheet" href="files/style/style.css" type="text/css">
+		<link rel="stylesheet" href="files/style/specialStyle.css" type="text/css">
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-		<script type="text/javascript" src="files/script/thickbox.js"></script>
 	</head>
-	<body onload="var btn = $('#boxbtn'); if(btn) btn.click()">
-	{% if output['action'] != 'error' %}
-		{% if show_box %}
-			<input id="boxbtn" alt="#TB_inline?height=300&width=300&inlineId=box" title="Supportaci" class="thickbox" type="button" style="display: none" />  
-			<div id="box" style="display: none"><p>
-				<form method="POST" action="">
-				Vuoi aiutarci a migliorare il servizio? <br>
-				Inserisci il tuo nick e il tuo forum qui sotto: <br>
-				<label><input type="text" name="nick" value=""> Nick <br></label>
-				<label><input type="text" name="forum" value=""> Forum <br></label>
-				<label style="font-size: 10px"><input type="checkbox" name="dont_show" value="1">Non mostrare piu' <br></label>
-				<input type="submit" value="Invia">
-				</form>
-			</p></div>
-		{% endif %}
+	<body>
+	{% if statsbox %}
+		<div class="statsbox">
+			<div class="cont">
+				<div class="subCont">
+					<span class="titlebox">Supporta le nostre nuove idee!</span>
+					<span class="truecontent">
+						Ciao, stiamo creando per voi utenti un nuovo servizio di statistica, che, oltre che permettervi di avere una tabella di resoconto delle vostre proprie azioni, vi permetterà di confrontarvi con gli altri utenti e di analizzare cosa davvero piace loro.<br>Per avvalerti di questo servizio, ti bastarà rendere pubblici il tuo Nickname su Forumfree e il Link del Forum per cui utilizzerai per la maggiore il FastScripts, altrimenti clicca sul secondo bottone in basso, grazie in ogni caso.
+						<br>
+						<form method="POST">
+							<label for="nickname">Nickname:</label><input type="text" class="textinput" size="20" id="nickname" name="nick"><br>
+							<label for="forumlink">Forum:</label><input type="text" class="textinput" size="20" id="forumlink" name="forum"><br>
+							<input type="submit" name="submit" class="forminput" value="Conferma">&nbsp;&nbsp;<input type="submit" name="submit" class="forminput" value="Non voglio aiutarvi">
+						</form>
+					</span>
+				</div>
+			</div>
+		</div>
 	{% endif %}
 		<div>
 			<table class="skin_tbl" align="center" cellpadding="0" cellspacing="0"><tr><td class="mleft_top"></td><td><table class="mback" width="100%" cellpadding="0" cellspacing="0"><tr><td class="mback_left"></td><td class="mback_center">
