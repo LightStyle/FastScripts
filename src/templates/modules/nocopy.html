@@ -2,6 +2,27 @@
 {% block page_title %}Scripts Anti Copiatura{% endblock %}
 {% block page_desc %}Scripts Anti Copiatura{% endblock %}
 {% block title %}Scripts Anti Copiatura{% endblock %}
+{% block jsfunc %}
+<script type="text/javascript"><!--
+$SCRIPT_ROOT = "http://devel.ffmagazine.net/fastscripts/src/";
+$(function() {
+	$('#preview').bind('click', function() {
+		//alert(gup('v'));
+		//alert($('input[name="nocopy_message"]').val());
+		$.getJSON($SCRIPT_ROOT + 'json/', {
+				name: 'nocopy',
+				nocopy_check: '1',
+				v: gup('v'),
+				nocopy_message: $('input[name="nocopy_message"]').val()
+				}, function(data) {
+					$("#result").html(data.code);
+					$("#prev").click()
+				});
+		return false;
+	});
+});
+// --></script>
+{% endblock %}
 
 {% block content %}
 	{% if output['action'] == 'idx' %}
@@ -22,17 +43,38 @@
 							<input type="text" name="nocopy_message">
 							<input type="hidden" name="nocopy_check" value="1">
 							<input type="submit" name="submit" value="Procedi">
+							<input type="button" id="preview" value="Anteprima">
+							<input alt="#TB_inline?height=300&width=400&inlineId=anteprima" title="Anteprima script" id="prev" class="thickbox" style="display:none" />
+							<div id="anteprima" style="display:none">
+								<p id="result">
+									Anteprima script
+								</p>
+							</div>
 						</form>
 					{% elif output['select'] == 3 %}
 						<form action="generator/nocopy?v=3" method="post">
 							<input type="text" name="nocopy_message" value="Copyright, nel rispetto dello staff, evita di copiare! Adesso apparirà il menu'">
 							<input type="hidden" name="nocopy_check" value="1">
 							<input type="submit" name="submit" value="Procedi">
+							<input type="button" id="preview" value="Anteprima">
+							<input alt="#TB_inline?height=300&width=400&inlineId=anteprima" title="Anteprima script" id="prev" class="thickbox" style="display: none">
+							<div id="anteprima" style="display: none">
+								<p id="result">
+									Anteprima script
+								</p>
+							</div>
 						</form>
 					{% elif output['select'] == 2 %}
 						<form action="generator/nocopy?v=2" method="post">
 							<input type="hidden" name="nocopy_check" value="1">
 							<input type="submit" name="submit" value="Procedi">
+							<input type="button" id="preview" value="Anteprima">
+							<input alt="#TB_inline?height=300&width=400&inlineId=anteprima" title="Anteprima script" id="prev" class="thickbox" style="display:none" />
+							<div id="anteprima" style="display:none">
+								<p id="result">
+									Anteprima script
+								</p>
+							</div>
 						</form>
 					{% else %}
 						<b>-Template errore-</b><br>

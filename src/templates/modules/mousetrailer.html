@@ -2,6 +2,33 @@
 {% block page_title %}Testo accanto al mouse{% endblock %}
 {% block page_desc %}Testo accanto al mouse{% endblock %}
 {% block title %}Testo accanto al mouse{% endblock %}
+{% block jsfunc %}
+<script type="text/javascript"><!--
+$SCRIPT_ROOT = "http://devel.ffmagazine.net/fastscripts/src/";
+$(function() {
+	$('#preview').bind('click', function() {
+		$.getJSON($SCRIPT_ROOT + 'json/', {
+				name: 'mousetrailer',
+				check: '1',
+				mousetrailer_speed: $('input[name="mousetrailer_speed"]').val(),
+				mousetrailer_speedPers: $('input[name="mousetrailer_speedPers"]').val(),
+				mousetrailer_isBold: $('input[name="mousetrailer_isBold"]').val(),
+				mousetrailer_isItalic: $('input[name="mousetrailer_isItalic"]').val(),
+				mousetrailer_isBlink: $('input[name="mousetrailer_isBlink"]').val(),
+				mousetrailer_color: $('input[name="mousetrailer_color"]').val(),
+				mousetrailer_distance: $('input[name="mousetrailer_distance"]').val(),
+				mousetrailer_size: $('input[name="mousetrailer_size"]').val(),
+				mousetrailer_sizeType: $('select[name="mousetrailer_sizeType"]').val(),
+				mousetrailer_text: $('input[name="mousetrailer_text"]').val()
+				}, function(data) {
+					$("#result").html(data.code);
+					$("#prev").click()
+				});
+		return false;
+	});
+});
+// --></script>
+{% endblock %}
 
 {% block content %}
 	{% if output['action'] == 'error' %}
@@ -39,6 +66,13 @@
 							<input type="text" name="mousetrailer_text"> Messaggio <br>
 							<input type="hidden" name="check" value="1"> <br>
 							<input type="submit" name="submit" value="Procedi">
+							<input type="button" id="preview" value="Anteprima">
+							<input alt="#TB_inline?height=300&width=400&inlineId=anteprima" title="Anteprima script" id="prev" class="thickbox" style="display:none" />
+							<div id="anteprima" style="display:none">
+								<p id="result">
+									Anteprima script
+								</p>
+							</div>
 						</form>
 	{% elif output['action'] == 'code' %}
 					<pre>{{output['code']}}</pre>
