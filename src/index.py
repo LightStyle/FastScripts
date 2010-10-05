@@ -32,7 +32,7 @@ import datetime
 import hashlib
 import os
 import pymongo
-from flask import Flask, render_template, request, current_app
+from flask import Flask, render_template, request, current_app, jsonify
 
 app = Flask(__name__)
 
@@ -98,9 +98,8 @@ def generatore(gen_name):
 				script_dict['forum'] = forum
 				script_dict['ua'] = str(request.user_agent)
 				db.stats.insert(script_dict)
-				response.set_cookie('ok', '1')
 		except:
-			response.set_cookie('err', '1')
+			pass
 
 		return response
 
@@ -168,6 +167,15 @@ def stats():
 	if my == 'True' or my == '1':
 		show_mine = True
 	return render_template('pubstats.html', data_list=ordered, show_mine=show_mine)
+
+@app.route("/admin/", methods=['GET','POST'])
+def admin():
+	return render_template('admin.html')
+
+@app.route("/admin/<sect>", methods=['GET','POST'])
+def admin_sect(sect):
+	if sect != '':
+		return render_template('admin.html')
 
 # ----- Funzioni aggiuntive ------
 
