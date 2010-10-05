@@ -32,7 +32,7 @@ import datetime
 import hashlib
 import os
 import pymongo
-from flask import Flask, render_template, request, current_app, jsonify
+from flask import Flask, render_template, request, current_app, jsonify, abort
 
 app = Flask(__name__)
 
@@ -102,6 +102,20 @@ def generatore(gen_name):
 			pass
 
 		return response
+
+@app.route("/json/", methods=['POST','GET'])
+def json():
+	name = param('name')
+	gen_name = name.lower()
+	gen_list = os.listdir('modules')
+	if (gen_name + '.py') in gen_list:
+		gen_load = __import__('modules.'+gen_name, globals(), locals(), ['generator'], -1)
+		gen = gen_load.generator()
+		output = gen.output()
+		json = jsonify(output)
+		return json
+	else:
+		return 'False'
 
 @app.route("/db_data_stats/", methods=['GET','POST'])
 def db_data_stats():
