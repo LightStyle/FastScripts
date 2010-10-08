@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>{% block page_title %}{% endblock %} - Generator</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="description" value="{% block page_desc %}{% endblock %}">
+		<base href="http://devel.ffmagazine.net/fastscripts/src/">
+		<link rel="stylesheet" href="files/style/style.css" type="text/css">
+		<link rel="stylesheet" href="files/style/specialStyle.css" type="text/css">
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	</head>
+	<body>
+	{% if statsbox %}
+		<div class="statsbox">
+			<div class="cont">
+				<div class="subCont">
+					<span class="titlebox">Supporta le nostre nuove idee!</span>
+					<span class="truecontent">
+						Ciao, stiamo creando per voi utenti un nuovo servizio di statistica, che, oltre che permettervi di avere una tabella di resoconto delle vostre proprie azioni, vi permetterà di confrontarvi con gli altri utenti e di analizzare cosa davvero piace loro.<br>Per avvalerti di questo servizio, ti bastarà rendere pubblici il tuo Nickname su Forumfree e il Link del Forum per cui utilizzerai per la maggiore il FastScripts, altrimenti clicca sul secondo bottone in basso, grazie in ogni caso.
+						<br>
+						<form method="POST">
+							<label for="nickname">Nickname:</label><input type="text" class="textinput" size="20" id="nickname" name="nick"><br>
+							<label for="forumlink">Forum:</label><input type="text" class="textinput" size="20" id="forumlink" name="forum"><br>
+							<input type="submit" name="submit" class="forminput" value="Conferma">&nbsp;&nbsp;<input type="submit" name="submit" class="forminput" value="Non voglio aiutarvi">
+						</form>
+					</span>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+		<div>
+			<table class="skin_tbl" align="center" cellpadding="0" cellspacing="0"><tr><td class="mleft_top"></td><td><table class="mback" width="100%" cellpadding="0" cellspacing="0"><tr><td class="mback_left"></td><td class="mback_center">
+
+				<div class="mtitle"><h1>{% block title %}{% endblock %}</h1></div>
+
+			</td><td class="mback_right"></td></tr></table></td><td class="mright_top"></td></tr><tr><td class="mleft"></td><td><table class="mainbg" style="text-align:center;width:100%" cellpadding="4" cellspacing="1">
+
+			<!-- <tr>
+				<td class="title" colspan="1">SOTTOTITOLO</td>
+			</tr> -->
+
+			<tr title="RIGA1">
+				<td class="ww">
+					{% block content %}{% endblock %}
+				</td>
+			</tr>
+
+			</table></td><td class="mright"></td></tr><tr><td class="mleft_bottom"></td><td><table class="msub" width="100%" cellpadding="0" cellspacing="0"><tr><td class="msub_left"></td><td class="msub_center">&nbsp;</td><td class="msub_right"></td></tr></table></td><td class="mright_bottom"></td></tr></table><br><br>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+{% extends "stats.html" %}
+{% block content %}
+		<tr>
+			<td class="aa">Nome script</td>
+			<td class="aa">Data</td>
+			{% if show_mine %}
+			<td class="aa">IP</td>
+			<td class="aa">Nick</td>
+			<td class="aa">Forum</td>
+			<td class="aa">User Agent</td>
+			{% endif %}
+		</tr>
+	{% for data in data_list %}
+		<tr>
+			<td class="ww">{{data['name']}}</td>
+			<td class="ww">{{data['date']}}</td>
+			{% if show_mine %}
+			<td class="ww">{{data['ip']}}</td>
+			<td class="ww">{{data['nick']}}</td>
+			<td class="ww">{{data['forum']}}</td>
+			<td class="ww">{{data['ua']}}</td>
+			{% endif %}
+		</tr>
+	{% else %}
+		<tr>
+			<td colspan="6">Nessun elemento corrisponde alla ricerca</td>
+		</tr>
+	{% endfor %}
+		<tr>
+			<td colspan="6" class="aa">
+				<a href="stats/?my=1">Mostra i miei</a> - <a href="stats/?orderBy=name">Ordina per nome</a> - <a href="stats/?orderBy=date">Ordina per data</a>
+			</td>
+		</tr>
+{% endblock %}

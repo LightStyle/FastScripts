@@ -2,7 +2,6 @@
 {% block page_title %}Bottone auto-inserimento codice nel profilo{% endblock %}
 {% block page_desc %}Bottone auto-inserimento codice nel profilo{% endblock %}
 {% block title %}Bottone auto-inserimento codice nel profilo{% endblock %}
-{% block jsfunc %}{% endblock %}
 
 {% block content %}
 	{% if output['action'] == 'error' %}
@@ -24,7 +23,6 @@
 							<textarea name="profilecode_alert"></textarea>
 							<input type="hidden" name="check" value="1"> <br>
 							<input type="submit" name="submit" value="Procedi">
-							<input type="button" id="preview" value="Anteprima" onclick="alert('Anteprima non disponibile per questo script');">
 						</form>
 	{% elif output['action'] == 'code' %}
 					<pre>{{output['code']['s1']}}</pre>

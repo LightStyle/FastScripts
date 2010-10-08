@@ -6,7 +6,7 @@
 # -------------------------------------------------------------------------
 # ForumFree Magazine Fast Scripts Generator
 # Ultimo aggiornamento: 10/09/2010 20:48 - v0.1alpha
-# Copyright (C) 2010 ForumFree Magazine http://ffmagazine.forumfree.it
+# Copyright (C) 2010 ForumFree Magazine http://ffmagazine.forumfree.it/
 #
 # Sviluppatori:
 # Niccolo` "Kurono" Campolungo <damnednickix@hotmail.it>
@@ -30,17 +30,19 @@
 import utils.errors as errors
 from flask import request
 class generator:
-	__script = ''
+	__script = {}
 	__check = 0
 
 	__alert = ''
 	__isText = 1
-	__id = '0'
-	__inputText = ''
-	__inputImage = ''
+	__isToProfile = 1
+	__input = ''
+	__inputPart = ''
+	__text = ''
+	__userCode = '1'
 
 	# Variabili di servizio
-	__action = '' # form | code
+	__action = '' # form | code | error
 	__page = 0 # numero pagina (form), qui non utilizzato
 	__error = {}
 
@@ -50,57 +52,71 @@ class generator:
 		except:
 			pass
 		try:
-			self.__isText = int(request.values['support_isText'])
+			self.__isText = int(request.values['profilecode_isText'])
 		except:
 			pass
 		try:
-			self.__alert = str(request.values['support_text'])
+			self.__isToProfile = int(request.values['profilecode_isToProfile'])
 		except:
 			pass
 		try:
-			self.__id = str(request.values['support_id'])
+			self.__text = str(request.values['profilecode_text'])
 		except:
 			pass
-			
-		self.__inputText = self.__isText and '<input type="submit" value="%s" class="forminput">\n' % self.__alert or ''
-		self.__inputImage = (not self.__isText) and '<input type="image" src="%s" style="border: 0;">\n' % self.__alert or ''
+		try:
+			self.__alert = str(request.values['profilecode_alert'])
+		except:
+			pass
+		
+		if self.__isText:
+			self.__inputPart = 'type="submit" value="%s" class="forminput"' % self.__text
+		else:
+			self.__inputPart = 'type="image" src="%s" style="border: 0;"' % self.__text
+		self.__input = '''<input %s onclick="alert('Grazie del supporto! Ricordati di registrare le modifiche una volta aperta la pagina del tuo profilo personale!')">''' % self.__inputPart
+		self.__userCode = self.__isToProfile and '1' or '22'
 
 		if self.__check == 1:
-			if self.__alert == '':
+			if self.__text == '':
 				self.__action = 'error'
-				self.__error = errors.error('001', 'Devi inserire un testo per il bottone')
-			elif self.__id == '':
-				self.__action = 'error'
-				self.__error = errors.error('001', "Devi inserire un ID")
-			elif (not self.__isText) and (not errors.urlMatch(self.__alert)):
+				if self.__isText:
+					self.__error = errors.error('001', 'Non hai specificato un testo per il bottone')
+				else:
+					self.__error = errors.error('001', "Non hai specificato il link dell'immagine")
+			elif (not self.__isText) and (not errors.urlMatch(self.__text)):
 				self.__action = 'error'
 				self.__error = errors.error('002', "Il link dell'immagine deve iniziare con http:// e finire con un'estensione valida")
-			elif not self.__id.isdigit():
+			elif self.__alert == '':
 				self.__action = 'error'
-				self.__error = errors.error('002', "L'ID deve essere un numero!")
+				self.__error = errors.error('001', 'Devi specificare un codice da aggiungere!')
 			else:
 				self.__action = 'code'
 				self.__script = self.__load()
 		else:
 			self.__action = 'form'
-		
+
 	def __load(self):
-		return '''<!-- Generato con il FFMagazine FastScripts - Script by Delta & Bowser -->
-<form action="http://supporto.forumfree.it/" method="post" name="REPLIER">
-<input type="hidden" name="st" value="0">
-<input type="hidden" name="act" value="Post">
-<input type="hidden" name="f" value="26622">
-<input type="hidden" name="CODE" value="03">
-<input type="hidden" name="t" value="%s">
-%s<input type="hidden" name="Post" value="Up!">
-%s</form><br>
-<small>Ideato da Delta & Bowser (c) <a href="http://ffmagazine.forumfree.it/">ForumFree Magazine</a></small>''' % (self.__id, self.__inputImage, self.__inputText)
+		s1 = '''<!-- Generato con il FFMag FastScripts - Script by Bowser -->
+<form action="/" name="insert" method="get">
+<input type="hidden" name="act" value="UserCP">
+<input type="hidden" name="CODE" value="%s">
+<input type="hidden" name="insertcode" value="1">
+%s
+</form>
+<br><small>Ideato da Bowser (c) <a href="http://ffmagazine.forumfree.it/">ForumFree Magazine</a></small>''' % (self.__isToProfile, self.__input)
+		s2 = '''<script type="text/javascript">
+//Generato con il FFMag FastScripts - Script by Bowser
+var code="%s";
+if(location.search.indexOf('act=UserCP')!=-1 && location.search.indexOf('CODE=%s')!=-1 && location.search.indexOf('insertcode=1')!=-1 ){
+if( document.REPLIER.Post.value.indexOf(code)==-1 ) document.REPLIER.Post.value = code}
+</script>''' % (self.__alert, self.__userCode)
+		s = {'s1': s1, 's2': s2}
+		return s
 
 	def output(self):
 		i = {}
 		i['action'] = self.__action
 		i['code'] = self.__script
 		i['page'] = self.__page
-		i['error'] = self.__error
-		
+		if self.__error:
+			i['error'] = self.__error
 		return i

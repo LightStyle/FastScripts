@@ -2,36 +2,6 @@
 {% block page_title %}Script Auto-Up Supporto{% endblock %}
 {% block page_desc %}Script Auto-Up Supporto{% endblock %}
 {% block title %}Script Auto-Up Supporto{% endblock %}
-{% block jsfunc %}
-<script type="text/javascript"><!--
-$SCRIPT_ROOT = "http://devel.ffmagazine.net/fastscripts/src/";
-$(function() {
-	$('#preview').bind('click', function() {
-		isText = '1';
-		if ($('input[name="support_isText"]:checked').val() == 0) {
-			isText = '0';
-		}
-		$.getJSON($SCRIPT_ROOT + 'json/', {
-				name: 'support',
-				check: '1',
-				support_isText: isText,
-				support_id: $('input[name="support_id"]').val(),
-				support_text: $('input[name="support_text"]').val()
-				}, function(data) {
-					if (data.code) {
-						$("#result").html(data.code);
-						$("#prev").click();
-					} else {
-						var str = data.error.code + ': ' + data.error.msg + '<br>\n' + data.error.txt;
-						$("#result").html(str);
-						$("#prev").click();
-					}
-				});
-		return false;
-	});
-});
-// --></script>
-{% endblock %}
 
 {% block content %}
 	{% if output['action'] == 'error' %}
@@ -49,17 +19,13 @@ $(function() {
 							<input type="text" name="support_text"> Testo / Link immagine <br>
 							<input type="text" name="support_id"> ID Topic
 							<input type="hidden" name="check" value="1"> <br>
+							<input type="button" name="preview" value="Anteprima" onclick="showPreview()">&nbsp;&nbsp;
 							<input type="submit" name="submit" value="Procedi">
-							<input type="button" id="preview" value="Anteprima">
-							<input alt="#TB_inline?height=300&width=400&inlineId=anteprima" title="Anteprima script" id="prev" class="thickbox" style="display:none" />
-							<div id="anteprima" style="display:none">
-								<p id="result">
-									Anteprima script
-								</p>
-							</div>
 						</form>
 	{% elif output['action'] == 'code' %}
 					<pre>{{output['code']}}</pre>
 					<a href="javascript:history.back()">< Torna indietro</a>
+	{% elif output['action'] == 'json' %}
+		{{output['json']}}
 	{% endif %}
 {% endblock %}

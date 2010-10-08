@@ -28,7 +28,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 # -------------------------------------------------------------------------
 import utils.errors as errors
-from flask import request
+from flask import request, jsonify
 class generator:
 	__script = ''
 	__check = 0
@@ -38,6 +38,8 @@ class generator:
 	__id = '0'
 	__inputText = ''
 	__inputImage = ''
+	__json = False
+	__json_dict = {}
 
 	# Variabili di servizio
 	__action = '' # form | code
@@ -61,26 +63,33 @@ class generator:
 			self.__id = str(request.values['support_id'])
 		except:
 			pass
+		try:
+			self.__json = str(request.values['json'])
+		except:
+			pass
+		
 			
 		self.__inputText = self.__isText and '<input type="submit" value="%s" class="forminput">\n' % self.__alert or ''
-		self.__inputImage = (not self.__isText) and '<input type="image" src="%s" style="border: 0;">\n' % self.__alert or ''
+		self.__inputImage = (not int(self.__isText)) and '<input type="image" src="%s" style="border: 0;">\n' % self.__alert or ''
 
 		if self.__check == 1:
 			if self.__alert == '':
 				self.__action = 'error'
 				self.__error = errors.error('001', 'Devi inserire un testo per il bottone')
-			elif self.__id == '':
+			if self.__id == '':
 				self.__action = 'error'
 				self.__error = errors.error('001', "Devi inserire un ID")
-			elif (not self.__isText) and (not errors.urlMatch(self.__alert)):
-				self.__action = 'error'
-				self.__error = errors.error('002', "Il link dell'immagine deve iniziare con http:// e finire con un'estensione valida")
-			elif not self.__id.isdigit():
+			if not self.__id.isdigit():
 				self.__action = 'error'
 				self.__error = errors.error('002', "L'ID deve essere un numero!")
-			else:
-				self.__action = 'code'
-				self.__script = self.__load()
+			if not self.__error:
+				if self.__json:
+					self.__action = 'json'
+					self.__json_dict['script'] = self.__load()
+					self.__json_dict['error'] = self.__error
+				else:
+					self.__action = 'code'
+					self.__script = self.__load()
 		else:
 			self.__action = 'form'
 		
@@ -102,5 +111,6 @@ class generator:
 		i['code'] = self.__script
 		i['page'] = self.__page
 		i['error'] = self.__error
-		
+		i['json'] = jsonify(self.__json_dict)
+
 		return i

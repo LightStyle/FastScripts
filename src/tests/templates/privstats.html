@@ -1,0 +1,29 @@
+{% extends "stats.html" %}
+{% block content %}
+		<tr>
+			<td class="aa">Nome script</td>
+			<td class="aa">Data</td>
+			<td class="aa">IP</td>
+			<td class="aa">Nick</td>
+			<td class="aa">Forum</td>
+			<td class="aa">User Agent</td>
+			<td class="aa">OID</td>
+			<td class="aa">Cancella</td>
+		</tr>
+	{% for data in data_list %}
+		<tr>
+			<td class="ww">{{data['name']}}</td>
+			<td class="ww">{{data['date']}}</td>
+			<td class="ww">{{data['ip']}}</td>
+			<td class="ww">{{data['nick']}}</td>
+			<td class="ww">{{data['forum']}}</td>
+			<td class="ww">{{data['ua']}}</td>
+			<td class="ww">{{data['_id']}}</td>
+			<td class="ww"><a href="db_data_stats/?delete={{data['_id']}}">X</a></td>
+		</tr>
+	{% else %}
+		<tr>
+			<td colspan="8">Nessun elemento presente nel database</td>
+		</tr>
+	{% endfor %}
+{% endblock %}

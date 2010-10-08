@@ -2,7 +2,6 @@
 {% block page_title %}Testo accanto al mouse{% endblock %}
 {% block page_desc %}Testo accanto al mouse{% endblock %}
 {% block title %}Testo accanto al mouse{% endblock %}
-{% block jsfunc %}{% endblock %}
 
 {% block content %}
 	{% if output['action'] == 'error' %}
@@ -40,7 +39,6 @@
 							<input type="text" name="mousetrailer_text"> Messaggio <br>
 							<input type="hidden" name="check" value="1"> <br>
 							<input type="submit" name="submit" value="Procedi">
-							<input type="button" id="preview" value="Anteprima" onclick="alert('Anteprima non ancora disponibile');">
 						</form>
 	{% elif output['action'] == 'code' %}
 					<pre>{{output['code']}}</pre>
